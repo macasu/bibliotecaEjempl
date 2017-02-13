@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.empleodigital.domain.entity.Autor;
 import org.empleodigital.domain.entity.Libro;
+import org.empleodigital.domain.enumeration.Categoria;
 import org.empleodigital.domain.repository.AutorRepositorio;
 import org.empleodigital.domain.repository.LibroRepositorio;
 import org.empleodigital.propiedadeseditor.PropiedadesEditorAutor;
@@ -40,7 +41,7 @@ public class LibroController {
 		model.addAttribute("titulo", "Lista de Libros");
 		model.addAttribute("libros", listaLibro);
 		model.addAttribute("autores", autorRepositorio.findAll());
-		
+		model.addAttribute("categorias", Categoria.values());
 		return "views/listadoLibros";
 
 	}
@@ -59,9 +60,10 @@ public class LibroController {
 
 		}
 
-		model.addAttribute("titulo", "Lista de Ingredientes");
+		model.addAttribute("titulo", "Lista de Libros");
 		model.addAttribute("libros", libroRepositorio.findAll());
 		model.addAttribute("autores", autorRepositorio.findAll());
+		model.addAttribute("categorias", Categoria.values());
 		return "views/listadoLibros";
 	}
 

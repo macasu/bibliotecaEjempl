@@ -20,8 +20,43 @@
 
 <c:set var="path" value="${pageContext.request.contextPath}"
 	scope="request" />
+<link rel="shortcut icon"
+	href="<c:url value="static/img/favicon.ico" />" type="image/x-icon">
+<link rel="icon" href='<c:url value="static/img/favicon.ico" />'
+	type="image/x-icon">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title><sitemesh:write property='title' /></title>
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+
+
+<!-- Optional theme -->
+
+
+<!-- Latest compiled and minified JavaScript -->
+
+<link href="<c:url value="/static/css/style.css" />" rel="stylesheet">
+<c:set var="path" value="${pageContext.request.contextPath}"
+	scope="request" />
+
+<sitemesh:write property='head' />
 </head>
 <body>
+	<div class="navbar">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">Biblioteca</a>
+			<ul class="nav navbar-nav navbar-right">
+				<li class="active"><a href="<c:url value="/" />">Inicio</a></li>
+				<li><a href="<c:url value="/autores" />">Autores</a></li>
+				<li><a href="<c:url value="/libros" />">Libros</a></li>
+				<li><a href="<c:url value="/" />">Administración</a></li>
+			</ul>
+		</div>
+	</div>
+	<sitemesh:write property='body' />
 
 	<div class="container">
 		<div class="row">
@@ -33,7 +68,7 @@
 							<th>ID</th>
 							<th>Titulo</th>
 							<th>Autor</th>
-
+							<th>Categoria</th>
 							<th>Editar</th>
 							<th>Borrar</th>
 						</tr>
@@ -44,6 +79,7 @@
 								<td>${libro.id}</td>
 								<td>${libro.titulo}</td>
 								<td>${libro.autor.nombre}</td>
+								<td>${libro.categoria }</td>
 								<!--  <td>${ingrediente.categoria}</td>-->
 								<td>
 									<button type="button" class="btn btn-warning btn-modificar">Editar</button>
@@ -93,6 +129,13 @@
 							<c:forEach items="${autores}" var="autor">
 								<option value="${autor.id}">${autor.nombre}</option>
 							</c:forEach>
+							</select> <input id="id" name="id" type="hidden">
+							<label for="autor">Categoria:
+						</label>
+							<select id="categoria" name="categoria" class="form-control">
+							<c:forEach items="${categorias}" var="categoria">
+								<option value="${categoria}">${categoria}</option>
+							</c:forEach>
 						</select> <input id="id" name="id" type="hidden">
 
 					</div>
@@ -104,8 +147,7 @@
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript"
-		src="static/js/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" src="static/js/jquery-2.1.3.min.js"></script>
 	<script type="text/javascript"
 		src="static/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="static/js/libro.js"></script>
