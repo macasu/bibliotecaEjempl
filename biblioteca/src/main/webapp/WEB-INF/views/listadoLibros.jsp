@@ -1,144 +1,118 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Listado de Libros</title>
-<c:set var="path" value="${pageContext.request.contextPath}"
-	scope="request" />
-<style type="text/css">
-@IMPORT url("${path}/static/bootstrap/css/bootstrap.min.css");
-
-@IMPORT url("${path}/static/bootstrap/css/bootstrap-theme.min.css");
-</style>
-
-<c:set var="path" value="${pageContext.request.contextPath}"
-	scope="request" />
-<link rel="shortcut icon"
-	href="<c:url value="static/img/favicon.ico" />" type="image/x-icon">
-<link rel="icon" href='<c:url value="static/img/favicon.ico" />'
-	type="image/x-icon">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-<title><sitemesh:write property='title' /></title>
-
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<!-- Latest compiled and minified CSS -->
-
-
-<!-- Optional theme -->
-
-
-<!-- Latest compiled and minified JavaScript -->
-
-<link href="<c:url value="/static/css/style.css" />" rel="stylesheet">
-<c:set var="path" value="${pageContext.request.contextPath}"
-	scope="request" />
-
-<sitemesh:write property='head' />
+<title>Insert title here</title>
+<script type="text/javascript"
+	src="<c:url value="/static/js/libro.js" />"></script>
 </head>
 <body>
-	<div class="navbar">
-		<div class="container-fluid">
-			<a class="navbar-brand" href="#">Biblioteca</a>
-			<ul class="nav navbar-nav navbar-right">
-				<li class="active"><a href="<c:url value="/" />">Inicio</a></li>
-				<li><a href="<c:url value="/autores" />">Autores</a></li>
-				<li><a href="<c:url value="/libros" />">Libros</a></li>
-				<li><a href="<c:url value="/" />">Administraci�n</a></li>
-			</ul>
-		</div>
-	</div>
-	<sitemesh:write property='body' />
 
 	<div class="container">
 		<div class="row">
-			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"></div>
-			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-				<table id="tabla-libros" class="table table-hover">
-					<thead>
-						<tr>
-							<th>ID</th>
-							<th>Titulo</th>
-							<th>Autor</th>
-							<th>Categoria</th>
-							<th>Editar</th>
-							<th>Borrar</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach items="${libros}" var="libro">
-							<tr data-id="${libro.id}">
-								<td>${libro.id}</td>
-								<td>${libro.titulo}</td>
-								<td>${libro.autor.nombre}</td>
-								<td>${libro.categoria }</td>
-								<!--  <td>${ingrediente.categoria}</td>-->
-								<td>
-									<button type="button" class="btn btn-warning btn-modificar">Editar</button>
-								</td>
-								<td>
-									<button type="button" class="btn btn-danger btn-eliminar">Borrar</button>
-								</td>
-							</tr>
-						</c:forEach>
-					<tfoot>
-						<tr>
-							<td colspan="5">Libro registrados: <span
-								id="registrar-libros">${libros.size()}</span></td>
-						</tr>
-						<tr>
-							<td colspan="5"><a class="btn btn-primary"
-								data-toggle="modal" href='#modal-libro'>Guardar Libro</a></td>
-						</tr>
-					</tfoot>
-					</tbody>
-
-				</table>
+			<div class="col-md-6">
+				<h2>Custom search field</h2>
+				<div id="custom-search-input">
+					<div class="input-group col-md-12">
+						<input type="text" id="AJAXtitulolibro"
+							class="form-control input-lg" placeholder="Buscar" /> <span
+							class="input-group-btn">
+							<button class="btn btn-info btn-lg" id="AJAXlibross"
+								type="button">
+								<i class="glyphicon glyphicon-search"></i>
+							</button>
+						</span>
+					</div>
+				</div>
 			</div>
-			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"></div>
 		</div>
 	</div>
 
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Título</th>
+				<th>Autor</th>
+				<th>Categoría</th>
+				<th>Editar</th>
+				<th>Borrar</th>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach items="${libros}" var="libro">
+				<tr data-id="${libro.id}">
+					<td>${libro.id}</td>
+					<td><a href="<c:url value="/libros/libro/${libro.id}" />">${libro.titulo}</a></td>
+					<td><a
+						href="<c:url value="/autores/autor/${libro.autor.id}" />">${libro.autor.nombre}</a></td>
+					<td>${libro.categoria }</td>
+					<td><a class="editar-libro btn btn-warning">Editar</a></td>
+					<td><a class="btn btn-danger open-Modal"
+						data-nombre="${libro.titulo}" data-id="${libro.id}"
+						data-toggle="modal" href='#modal-borrar'>Borrar</a></td>
+				</tr>
+			</c:forEach>
+			<tr>
+				<td colspan="5"><a class="btn btn-primary" data-toggle="modal" href='#modal-libro'>Añadir libro</a></td>
+			</tr>
+		</tbody>
+	</table>
 
 
 
-	<div class="modal fade" id="modal-libro" tabindex="-1" role="dialog"
-		aria-hidden="true">
+	<!-- empiezan la diversion -->
+
+	<div class="modal fade" id="modal-libro">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form id="form-ingrediente" method="post">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title">Informacion do libro</h4>
-					</div>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Añadir Libro</h4>
+				</div>
+				<form method="POST" action="<c:url value="/libros"/>" role="form">
 					<div class="modal-body">
-						<label for="titulo">Titulo: </label> <input id="titulo"
-							name="titulo" class="form-control"> <label for="autor">Autor:
-						</label> <select id="autor" name="autor" class="form-control">
-							<c:forEach items="${autores}" var="autor">
-								<option value="${autor.id}">${autor.nombre}</option>
-							</c:forEach>
-							</select> <input id="id" name="id" type="hidden">
-							<label for="autor">Categoria:
-						</label>
-							<select id="categoria" name="categoria" class="form-control">
-							<c:forEach items="${categorias}" var="categoria">
-								<option value="${categoria}">${categoria}</option>
-							</c:forEach>
-						</select> <input id="id" name="id" type="hidden">
+						<div class="form-group">
+							<label for="Nombre">Título</label> <input type="text" class="form-control"
+							id="titulo-libro" name="titulo" placeholder="Título del libro"> 
+						</div>
+						<div class="form-group">
+							<label for="autor">Autor</label> <select name="autor" id="autor"
+								class="form-control">
+								<c:forEach items="${autores}" var="autor">
 
+									<option value="${autor.id}">${autor.nombre}</option>
+
+								</c:forEach>
+								
+							</select>
+							<input type="hidden" id="_csrf" name="_csrf" value="${_csrf.token}">
+						</div>
+
+						<div class="form-group">
+							<label for="categoria">Categoria</label> <select name="categoria"
+								id="categoria" class="form-control">
+								<c:forEach items="${categorias}" var="categoria">
+
+									<option value="${categoria}">${categoria}</option>
+
+								</c:forEach>
+
+							</select>
+						</div>
+
+						<input type="hidden" name="id" id="inputId" class="form-control"
+							value="">
 					</div>
+
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 						<button type="submit" class="btn btn-primary">Guardar</button>
@@ -147,9 +121,30 @@
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript" src="static/js/jquery-2.1.3.min.js"></script>
-	<script type="text/javascript"
-		src="static/bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="static/js/libro.js"></script>
+
+
+	<!-- Empieza diversion 2 -->
+
+	<div class="modal fade" id="modal-borrar">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Estas Seguro??</h4>
+				</div>
+				<div class="modal-body">
+					¿Estas seguro de borrar este libro? <input type="hidden" name=""
+						id="libro" class="form-control" value=""> <strong><span
+						id="libroNombre"></span></strong>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+					<button type="button" class="btn btn-primary btn-borrar"
+						data-dismiss="modal">Si</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

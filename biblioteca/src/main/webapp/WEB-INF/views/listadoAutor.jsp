@@ -1,105 +1,131 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
+<meta name="_csrf" content="${_csrf.token}" />
+<!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content="${_csrf.headerName}" />
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Listado de Autor</title>
-<c:set var="path" value="${pageContext.request.contextPath}"
-	scope="request" />
-<style type="text/css">
-@IMPORT url("${path}/static/bootstrap/css/bootstrap.min.css");
-
-@IMPORT url("${path}/static/bootstrap/css/bootstrap-theme.min.css");
-</style>
-
-<c:set var="path" value="${pageContext.request.contextPath}"
-	scope="request" />
+<title>Insert title here</title>
+<script type="text/javascript"
+	src="<c:url value="/static/js/autor.js" />"></script>
 </head>
+
 <body>
+
 	<div class="container">
 		<div class="row">
-			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"></div>
-			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-				<table id="tabla-libros" class="table table-hover">
-					<thead>
-						<tr>
-							<th>ID</th>
-							<th>nombre</th>
-							<th>Editar</th>
-							<th>Borrar</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach items="${autores}" var="autor">
-							<tr data-id="${autor.id}">
-								<td>${autor.id}</td>
-								<td>${autor.nombre}</td>
-								<td>
-									<button type="button" class="btn btn-warning btn-modificar">Editar</button>
-								</td>
-								<td>
-									<button type="button" class="btn btn-danger btn-eliminar">Borrar</button>
-								</td>
-							</tr>
-						</c:forEach>
-					<tfoot>
-						<tr>
-							<td colspan="5">Autor registrados: <span
-								id="registrar-autor">${autores.size()}</span></td>
-						</tr>
-						<tr>
-							<td colspan="5"><a class="btn btn-primary"
-								data-toggle="modal" href='#modal-autor'>Guardar Libro</a></td>
-						</tr>
-					</tfoot>
-					</tbody>
-
-				</table>
+			<div class="col-md-6">
+				<h2>Buscar Autores por nombre</h2>
+				<div id="custom-search-input">
+					<div class="input-group col-md-12">
+						<input type="text" id="AJAXnombreAutor"
+							class="form-control input-lg" placeholder="Buscar" /> <span
+							class="input-group-btn">
+							<button class="btn btn-info btn-lg" id="AJAXautores"
+								type="button">
+								<i class="glyphicon glyphicon-search"></i>
+							</button>
+						</span>
+					</div>
+				</div>
 			</div>
-			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"></div>
 		</div>
 	</div>
 
+	<div id="ajaxOutput">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Nombre</th>
+					<th>Editar</th>
+					<th>Borrar</th>
+				</tr>
+			</thead>
+			<tbody>
 
 
+				<c:forEach items="${autores}" var="autor">
+					<tr data-id="${autor.id}">
+						<td>${autor.id}</td>
+						<td><a href="<c:url value="/autores/autor/${autor.id}" />">${autor.nombre}</a></td>
+						<td><a class="editar-autor btn btn-warning">Editar</a></td>
+						<td><a class="btn btn-danger open-Modal"
+							data-nombre="${autor.nombre}" data-id="${autor.id}"
+							data-toggle="modal" href='#modal-borrar'>Borrar</a></td>
+					</tr>
+				</c:forEach>
 
-	<div class="modal fade" id="modal-autor" tabindex="-1" role="dialog"
-		aria-hidden="true">
+				<tr>
+					<td colspan="5"><a class="btn btn-primary" data-toggle="modal"
+						href='#modal-autor'>Añadir autor</a></td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+
+	<!-- empiezan la diversion -->
+
+	<div class="modal fade" id="modal-autor">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form id="form-autor" method="post">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title">Informacion del autor</h4>
-					</div>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Añadir Autor</h4>
+				</div>
+				<form method="POST" action="<c:url value="/autores"/>" role="form">
 					<div class="modal-body">
-						<label for="nombre">Autor: </label> <input id="nombre"
-							name="nombre" class="form-control"> 
-							
-							
-							<input id="id"
-							name="id" type="hidden">
+						<div class="form-group">
+							<label for="Nombre">Nombre</label> <input type="text"
+								class="form-control" id="nombre-autor" name="nombre"
+								placeholder="Input field">
+						</div>
+						<input type="hidden" name="id" id="inputId" class="form-control"
+							value="">
 					</div>
+
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 						<button type="submit" class="btn btn-primary">Guardar</button>
 					</div>
+					<input type="hidden" id="_csrf" name="_csrf" value="${_csrf.token}">
 				</form>
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript" src="static/js/jquery-2.1.3.min.js"></script>
-	<script type="text/javascript"
-		src="static/bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="static/js/autor.js"></script>
+
+
+	<!-- Empieza diversion 2 -->
+
+	<div class="modal fade" id="modal-borrar">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Estas Seguro??</h4>
+				</div>
+				<div class="modal-body">
+					¿Estas seguro de borrar este autor? <input type="hidden" name=""
+						id="autor" class="form-control" value=""> <strong><span
+						id="autorNombre"></span></strong>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+					<button type="button" class="btn btn-primary btn-borrar"
+						data-dismiss="modal">Si</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

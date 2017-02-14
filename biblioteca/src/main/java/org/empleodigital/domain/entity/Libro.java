@@ -1,6 +1,9 @@
 package org.empleodigital.domain.entity;
 
+import java.util.Locale.Category;
+
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,12 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
 
-import org.empleodigital.domain.enumeration.Categoria;
 import org.hibernate.validator.constraints.NotEmpty;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Libro {
@@ -22,33 +21,22 @@ public class Libro {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	@NotNull
+	
 	@NotEmpty
 	private String titulo;
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "autor")
-	private Autor autor;
-
-	@OneToOne(mappedBy = "libro", optional = true)
-	private Prestamo prestamo;
-	@Enumerated
-	private Categoria categoria;
-
-	public Categoria getCategoria() {
-		return categoria;
-	}
-
-	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
-	}
-
 	
-
-	public Libro() {
-		super();
-		// TODO Auto-generated constructor stub
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="autor", nullable = false)
+	private Autor autor;
+	
+	@OneToOne(mappedBy="libro")
+	private Prestamo prestamo;
+	
+	@Enumerated(EnumType.ORDINAL) 
+	private Category categoria;
+	
+	public Libro(){
+		
 	}
 
 	public Long getId() {
@@ -75,20 +63,61 @@ public class Libro {
 		this.autor = autor;
 	}
 
-	public Libro(String titulo, Autor autor, Categoria categoria) {
-		super();
-		this.titulo = titulo;
-		this.autor = autor;
-		this.categoria =categoria;
+	public Category getCategoria() {
+		return categoria;
 	}
 
-	public Prestamo getPrestamo() {
-		return prestamo;
+	public void setCategoria(Category categoria) {
+		this.categoria = categoria;
 	}
 
-	public void setPrestamo(Prestamo prestamo) {
-		this.prestamo = prestamo;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((autor == null) ? 0 : autor.hashCode());
+		result = prime * result + ((categoria == null) ? 0 : categoria.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((prestamo == null) ? 0 : prestamo.hashCode());
+		result = prime * result + ((titulo == null) ? 0 : titulo.hashCode());
+		return result;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Libro other = (Libro) obj;
+		if (autor == null) {
+			if (other.autor != null)
+				return false;
+		} else if (!autor.equals(other.autor))
+			return false;
+		if (categoria != other.categoria)
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (prestamo == null) {
+			if (other.prestamo != null)
+				return false;
+		} else if (!prestamo.equals(other.prestamo))
+			return false;
+		if (titulo == null) {
+			if (other.titulo != null)
+				return false;
+		} else if (!titulo.equals(other.titulo))
+			return false;
+		return true;
+	}
+	
+	
 	
 	
 

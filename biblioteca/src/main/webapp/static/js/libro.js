@@ -1,54 +1,67 @@
-$(document).ready(function(){
-	
-	aplicarListeners();
+$(document).ready(function() {
+	editarJugador();
+	borraJug();
+})
 
-	
-});
+var limpiarModal=function(){
+	$('.modal-title').text("Añadir Libro");
+	$('#titulo-libro').val('');
+	$('#inputId').val('');
+}
 
-
-
-var limparModal = function(){
-	$('#id').val('');
-	$('#autor').val('');
-	$('#titulo').val('');
-};
-
-
-var aplicarListeners = function(){
-	$('#modal-libro').on('hide.bs.modal', limparModal);
-	
-	$('.btn-modificar').on('click', function(e){
-		var id = $(this).parents('tr').data('id');
-		var url = 'libros/'+id;
-		
-		$.get(url)
-			.done(function(libro){
-				$('#id').val(libro.id);
-				$('#autor').val(libro.autor.nombre);
-				$('#titulo').val(libro.titulo);
-				
-				$('#modal-libro').modal('show');
-			});
+var cogerId=function(){
+	$(document).on("click", ".open-Modal", function() {
+		var putita = $(this).data('id');
+		var nomfede = $(this).data('nombre');
+		$(".modal-body #libro").val(putita);
+		$(".modal-body #libroNombre").text(nomfede);
 	});
+}
+
+var borraJug=function(){
+	cogerId();
 	
-	
-	$('.btn-eliminar').on('click', function(){
-		var id = $(this).parents('tr').data('id');
-		
-		
+	$(".btn-borrar").on("click", function() {
+		var id = $(".modal-body #libro").val();
 		$.ajax({
-			url : "libros/"+id,
-			type: 'DELETE',
-
+			url : "/javaBiblioteca/libros/" + id,
+			
+			type : 'DELETE',
+			 error: function(xhr, status, error) {
+		            alert(status);
+		            alert(this.url);
+		            alert(xhr.responseText);
+		        },
+			success : function(result) {
+				$('tr[data-id="' + id + '"]').remove();
+			}
 		
-		    success: function(result) {
-		    	$('tr[data-id="'+id+'"]').remove();
-				var libro = parseInt( $('#quantidade-libro').text() );
-		    	$('#quantidade-libro').text(libro - 1);
-		    }
 		});
-		
-		
-	});
+	})
+}
+
+var editarJugador= function() {
+	cogerId();
 	
+	$(".editar-libro").on('click', function() {
+		var id = $(this).parents('tr').data('id');
+		var url = '/javaBiblioteca/libros/' + id;
+		alert(id);
+
+		$.get(url).done(function(libro) {
+			dataType: 'json',
+			$('.modal-title').text("Editar Libro");
+			$('#titulo-libro').val(libro.titulo);
+			$('#autor').val(libro.autor.id);
+			$('#categoria').val(libro.categoria);
+			$('#inputId').val(libro.id);
+			
+			$('#modal-libro').modal('show');
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+	        console.log("The following error occured: " + textStatus, errorThrown);
+	    });
+		$('#modal-libro').on('hide.bs.modal', limpiarModal);
+
+	})
+
 }
