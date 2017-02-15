@@ -2,8 +2,7 @@ package org.empleodigital.propiedadeseditor;
 
 import java.beans.PropertyEditorSupport;
 
-import javax.management.relation.Role;
-
+import org.empleodigital.domain.entity.Role;
 import org.empleodigital.domain.repository.RoleRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

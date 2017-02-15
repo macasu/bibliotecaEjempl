@@ -6,7 +6,7 @@ $(document).ready(function() {
 
 var limpiarModal = function() {
 	$('.modal-title').text("Añadir Autor");
-	$('#nombre-jugador').val('');
+	$('#nombre-juegos').val('');
 	$('#inputId').val('');
 }
 

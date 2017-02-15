@@ -1,8 +1,11 @@
 package org.empleodigital.controller;
 
-import javax.management.relation.Role;
+
+
+
 import javax.validation.Valid;
 
+import org.empleodigital.domain.entity.Role;
 import org.empleodigital.domain.entity.Usuario;
 import org.empleodigital.domain.repository.UsuarioRepositorio;
 import org.empleodigital.propiedadeseditor.RolePropertyEditor;
