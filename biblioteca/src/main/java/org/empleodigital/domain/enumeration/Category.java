@@ -1,5 +1,5 @@
 package org.empleodigital.domain.enumeration;
 
-public enum Categoria {
+public enum Category {
 MISTERIO, HORROR, AVENTURA, FANTASIA, COMEDIA, SUSPENSE;
 }
